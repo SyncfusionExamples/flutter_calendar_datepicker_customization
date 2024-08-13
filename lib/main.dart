@@ -30,13 +30,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DateTime? start;
-  DateTime? end;
-  CalendarController controller = CalendarController();
-  DateRangePickerController datePickerController = DateRangePickerController();
+  final CalendarController _controller = CalendarController();
+  final DateRangePickerController _datePickerController =
+      DateRangePickerController();
 
   String? _headerText;
-  DateTime? selectedDate;
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       style:
                           const TextStyle(fontSize: 20, color: Colors.black)),
                   onPressed: () {
-                    datePickerController.displayDate = selectedDate;
+                    _datePickerController.displayDate = _selectedDate;
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -77,10 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   headerTextStyle: TextStyle(
                                       color: Colors.black, fontSize: 20)),
                               child: SfDateRangePicker(
-                                controller: datePickerController,
+                                controller: _datePickerController,
                                 onSelectionChanged: (p0) {
-                                  selectedDate = p0.value;
-                                  controller.displayDate = selectedDate;
+                                  _selectedDate = p0.value;
+                                  _controller.displayDate = _selectedDate;
                                   Navigator.pop(context);
                                 },
                               ),
@@ -98,14 +97,14 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SfCalendar(
               backgroundColor: Colors.white,
               headerHeight: 0,
-              controller: controller,
+              controller: _controller,
               todayHighlightColor: const Color.fromRGBO(35, 188, 1, 1),
               view: CalendarView.day,
               onViewChanged: (viewChangedDetails) {
                 if (viewChangedDetails.visibleDates.isNotEmpty) {
                   _headerText = DateFormat('MMMM yyyy')
                       .format(viewChangedDetails.visibleDates[0]);
-                  selectedDate = viewChangedDetails.visibleDates[0];
+                  _selectedDate = viewChangedDetails.visibleDates[0];
                 }
                 SchedulerBinding.instance.addPostFrameCallback(
                   (duration) {
